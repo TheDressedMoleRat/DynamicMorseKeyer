@@ -8,8 +8,7 @@ let tests = [
 	[211,88,111,64,231,75,102,379,115,71,234,106,100,385,89,341,103,79,255,248,122,62,224,97,92]
 ]
 
-let durations = tests[4]
-let out_paragraph = document.getElementById("out_paragraph");
+let durations = tests[3]
 
 let down_times = durations.filter((_, i) => i%2 == 0);
 let up_times = durations.filter((_,i) => i%2 == 1);
@@ -31,51 +30,7 @@ function get_threshold(unsorted_list) {
 	return threshold;
 }
 
-function letter(morse) {
-	return (morse in morse_dict) ? morse_dict[morse] : morse;
-}
+console.log(get_threshold(down_times));
 
-function update_output() {
-    let dash_ms = get_threshold(durations.filter((_, i) => i%2 == 0))
-    let unit = dash_ms / 3;
-	let gap_ms = 3 * unit;
-	let space_ms = 7 * unit;
-
-	let out_string = "";
-	let buffer = "";
-
-	durations.forEach((duration, i) => {
-		let is_down_duration = (i % 2 == 0);
-
-		if (is_down_duration) {
-			if (duration > dash_ms) {buffer += "-";}
-			else {buffer += ".";}
-		}
-		else {
-			if (duration > gap_ms) {
-				out_string += letter(buffer);
-				buffer = "";
-			}
-			if (duration > space_ms) {out_string += "  ";}
-		}
-	});
-	
-	out_string += letter(buffer);
-
-	out_paragraph.textContent = out_string;
-}
-
-function add_duration() {
-	if (last_toggle == 0) {
-		last_toggle = Date.now();
-		return;
-	}
-
-	durations.push(Date.now() - last_toggle);
-
-	last_toggle = Date.now();
-}
-
-
-
-update_output();
+let p = document.getElementById("out");
+p.textContent = down_times;
